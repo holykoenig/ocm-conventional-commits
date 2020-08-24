@@ -21,10 +21,8 @@ export default async function prompts(
 ): Promise<CommitMessage> {
   const getBranchName = () => {
     const branch = repo.state.HEAD.name;
-    if (branch.includes('TUB')) {
-      return branch.split('/')[1];
-    }
-    return 'NO-TICKET';
+    const reg = /.*(TUB-\d+).*/;
+    return new RegExp(reg).test(branch) ? branch.match(reg)[1] : 'NO-TICKET';
   };
 
   function lineBreakFormatter(input: string): string {
