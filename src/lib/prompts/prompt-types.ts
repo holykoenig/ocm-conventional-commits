@@ -139,6 +139,7 @@ async function createConfiguriableQuickPick({
     };
   });
   items.push(newItem);
+  // @ts-ignore
   let selectedValue = await createQuickPick({
     placeholder,
     items,
@@ -147,6 +148,7 @@ async function createConfiguriableQuickPick({
     noneItem,
   });
   if (selectedValue === newItem.label) {
+    // @ts-ignore
     selectedValue = await createInputBox({
       placeholder: newItemPlaceholder,
       step,

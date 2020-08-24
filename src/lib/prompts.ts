@@ -113,7 +113,7 @@ export default async function prompts(
     };
   }
 
-  const questions: Prompt[] = [
+  const questions: any = [
     {
       type: PROMPT_TYPES.QUICK_PICK,
       name: 'type',
@@ -158,6 +158,7 @@ export default async function prompts(
   };
 
   for (const question of questions) {
+    // @ts-ignore
     commitMessage[question.name as keyof CommitMessage] = await promptTypes[
       question.type
     ](
