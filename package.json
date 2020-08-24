@@ -4,7 +4,7 @@
   "description": "OCM Conventional Commits for VSCode.",
   "icon": "assets/ocm-white.png",
   "publisher": "holykoenig",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "engines": {
     "vscode": "^1.14.0"
   },
@@ -66,16 +66,16 @@
         "conventionalCommits.scopes": {
           "type": "array",
           "default": [
+            "omnichannel",
             "login",
-            "erp",
             "search",
             "plp",
             "pdp",
-            "pms",
             "checkout",
             "actions",
             "security",
-            "omnichannel"
+            "erp",
+            "pms"
           ],
           "markdownDescription": "Available scopes."
         },
