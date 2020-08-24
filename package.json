@@ -1,10 +1,10 @@
 {
-  "name": "vscode-conventional-commits",
-  "displayName": "VSCode Conventional Commits",
-  "description": "💬Conventional Commits for VSCode.",
-  "icon": "assets/icon.png",
-  "publisher": "vivaxy",
-  "version": "1.11.0",
+  "name": "ocm-vscode-conventional-commits",
+  "displayName": "OCM Conventional Commits",
+  "description": "OCM Conventional Commits for VSCode.",
+  "icon": "assets/ocm-white.png",
+  "publisher": "holykoenig",
+  "version": "1.13.0",
   "engines": {
     "vscode": "^1.14.0"
   },
@@ -41,8 +41,8 @@
         "command": "extension.conventionalCommits",
         "title": "OCM Conventional Commits",
         "icon": {
-          "dark": "./assets/menu-icon-dark.svg",
-          "light": "./assets/menu-icon-light.svg"
+          "dark": "./assets/ocm-logo-white.svg",
+          "light": "./assets/ocm-logo.svg"
         }
       }
     ],
