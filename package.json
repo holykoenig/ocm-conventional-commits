@@ -4,7 +4,7 @@
   "description": "OCM Conventional Commits for VSCode.",
   "icon": "assets/ocm-white.png",
   "publisher": "holykoenig",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "engines": {
     "vscode": "^1.14.0"
   },

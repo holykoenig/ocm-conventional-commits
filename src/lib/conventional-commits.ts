@@ -167,7 +167,6 @@ async function updateConventionalCommits(commitMessage: any) {
     output.appendLine(`message: ${message}`);
 
     // 6. switch to scm and put message into message box
-    vscode.commands.executeCommand('workbench.view.scm');
     repository.inputBox.value = message;
     output.appendLine(`inputBox.value: ${repository.inputBox.value}`);
   } catch (e) {
