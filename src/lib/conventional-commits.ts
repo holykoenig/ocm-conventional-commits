@@ -30,16 +30,9 @@ function formatCommitMessage(commitMessage: CommitMessage) {
     message += `(${scope})`;
   }
   message += ': ';
-  if (commitMessage.gitmoji) {
-    message += `${commitMessage.gitmoji} `;
-  }
   const subject = commitMessage.subject.trim();
   if (subject) {
     message += subject;
-  }
-  const body = commitMessage.body.trim();
-  if (body) {
-    message += `\n\n${body}`;
   }
   const footer = commitMessage.footer.trim();
   if (footer) {
@@ -156,8 +149,6 @@ export default function createConventionalCommits() {
       outputExtensionVersion('Git', 'vscode.git');
 
       outputConfiguration('autoCommit');
-      outputConfiguration('gitmoji');
-      outputConfiguration('emojiFormat');
       outputConfiguration('scopes');
       outputConfiguration('lineBreak');
 
@@ -191,13 +182,12 @@ export default function createConventionalCommits() {
       );
 
       // 5. get message
-      const commitMessage = await prompts({
-        gitmoji: configuration.get<boolean>('gitmoji'),
-        emojiFormat: configuration.get<configuration.EMOJI_FORMAT>(
-          'emojiFormat',
-        ),
-        lineBreak: configuration.get<string>('lineBreak'),
-      });
+      const commitMessage = await prompts(
+        {
+          lineBreak: configuration.get<string>('lineBreak'),
+        },
+        repository,
+      );
       output.appendLine(
         `commitMessage: ${JSON.stringify(commitMessage, null, 2)}`,
       );

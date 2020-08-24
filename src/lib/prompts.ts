@@ -3,15 +3,6 @@
  * @author vivaxy
  */
 const conventionalCommitsTypes = require('conventional-commit-types');
-const gitmojis: {
-  gitmojis: {
-    emoji: string;
-    entity: string;
-    code: string;
-    description: string;
-    name: string;
-  }[];
-} = require('gitmojis');
 
 import * as configuration from './configuration';
 import promptTypes, { PROMPT_TYPES, Prompt } from './prompts/prompt-types';
@@ -20,15 +11,22 @@ import CommitMessage from './commit-message';
 import commitlint from './commitlint';
 import * as output from './output';
 
-export default async function prompts({
-  gitmoji,
-  emojiFormat,
-  lineBreak,
-}: {
-  gitmoji: boolean;
-  emojiFormat: configuration.EMOJI_FORMAT;
-  lineBreak: string;
-}): Promise<CommitMessage> {
+export default async function prompts(
+  {
+    lineBreak,
+  }: {
+    lineBreak: string;
+  },
+  repo: any,
+): Promise<CommitMessage> {
+  const getBranchName = () => {
+    const branch = repo.state.HEAD.name;
+    if (branch.includes('TUB')) {
+      return branch.split('/')[1];
+    }
+    return 'NO-TICKET';
+  };
+
   function lineBreakFormatter(input: string): string {
     if (lineBreak) {
       return input.replace(
@@ -43,27 +41,24 @@ export default async function prompts({
     const typeEnum = commitlint.getTypeEnum();
     if (typeEnum.length === 0) {
       return Object.keys(conventionalCommitsTypes.types).map(function (type) {
-        const { title, description } = conventionalCommitsTypes.types[type];
+        const { title } = conventionalCommitsTypes.types[type];
         return {
           label: type,
           description: title,
-          detail: description,
         };
       });
     }
     return typeEnum.map(function (type) {
       if (type in conventionalCommitsTypes.types) {
-        const { description, title } = conventionalCommitsTypes.types[type];
+        const { title } = conventionalCommitsTypes.types[type];
         return {
           label: type,
           description: title,
-          detail: description,
         };
       }
       return {
         label: type,
         description: names.DESCRIPTION_OF_AN_ITEM_FROM_COMMITLINT_CONFIG,
-        detail: names.DETAIL_OF_AN_ITEM_FROM_COMMITLINT_CONFIG,
       };
     });
   }
@@ -130,24 +125,6 @@ export default async function prompts({
     },
     getScopePrompt(),
     {
-      type: PROMPT_TYPES.QUICK_PICK,
-      name: 'gitmoji',
-      placeholder: 'Choose a gitmoji.',
-      items: gitmojis.gitmojis.map(function ({ emoji, code, description }) {
-        return {
-          label: emojiFormat === 'code' ? code : emoji,
-          description: emojiFormat === 'code' ? emoji : '',
-          detail: description,
-        };
-      }),
-      noneItem: {
-        label: 'None',
-        description: '',
-        detail: 'No gitmoji.',
-        alwaysShow: true,
-      },
-    },
-    {
       type: PROMPT_TYPES.INPUT_BOX,
       name: 'subject',
       placeholder: 'Write a short, imperative tense description of the change.',
@@ -158,43 +135,25 @@ export default async function prompts({
     },
     {
       type: PROMPT_TYPES.INPUT_BOX,
-      name: 'body',
-      placeholder: 'Provide a longer description of the change.',
-      validate(input: string) {
-        return commitlint.lintBody(input);
-      },
-      format: lineBreakFormatter,
-    },
-    {
-      type: PROMPT_TYPES.INPUT_BOX,
       name: 'footer',
-      placeholder: 'List any breaking changes or issues closed by this change.',
+      value: getBranchName(),
       validate(input: string) {
         return commitlint.lintFooter(input);
       },
       format: lineBreakFormatter,
     },
-  ]
-    .filter(function (question) {
-      if (gitmoji) {
-        return true;
-      }
-      return question.name !== 'gitmoji';
-    })
-    .map(function (question, index, array) {
-      return {
-        ...question,
-        step: index + 1,
-        totalSteps: array.length,
-      };
-    });
+  ].map(function (question, index, array) {
+    return {
+      ...question,
+      step: index + 1,
+      totalSteps: array.length,
+    };
+  });
 
   const commitMessage: CommitMessage = {
     type: '',
     scope: '',
-    gitmoji: '',
     subject: '',
-    body: '',
     footer: '',
   };
 

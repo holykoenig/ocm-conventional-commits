@@ -39,7 +39,7 @@
     "commands": [
       {
         "command": "extension.conventionalCommits",
-        "title": "Conventional Commits",
+        "title": "OCM Conventional Commits",
         "icon": {
           "dark": "./assets/menu-icon-dark.svg",
           "light": "./assets/menu-icon-light.svg"
@@ -56,33 +56,27 @@
       ]
     },
     "configuration": {
-      "title": "Conventional Commits",
+      "title": "OCM Conventional Commits",
       "properties": {
         "conventionalCommits.autoCommit": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Controls whether the extension should automatically commit files.\n\n*Enable `Settings > git.enableSmartCommit` and set `Settings > git.smartCommitChanges` to `all` to commit all changes when there are no staged changes.*\n\n*Set `Settings > git.postCommitCommand` to `sync` to run `git.sync` after commit.*"
         },
-        "conventionalCommits.gitmoji": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Controls whether the extension should prompt for an gitmoji."
-        },
-        "conventionalCommits.emojiFormat": {
-          "type": "string",
-          "default": "code",
-          "enum": [
-            "code",
-            "emoji"
-          ],
-          "markdownEnumDescriptions": [
-            "Display as `:bug:`",
-            "Display as `🐛`"
-          ]
-        },
         "conventionalCommits.scopes": {
           "type": "array",
-          "default": [],
+          "default": [
+            "login",
+            "erp",
+            "search",
+            "plp",
+            "pdp",
+            "pms",
+            "checkout",
+            "actions",
+            "security",
+            "omnichannel"
+          ],
           "markdownDescription": "Available scopes."
         },
         "conventionalCommits.lineBreak": {
@@ -122,7 +116,6 @@
   "dependencies": {
     "@commitlint/load": "^9.0.0",
     "@commitlint/rules": "^9.0.1",
-    "conventional-commit-types": "^3.0.0",
-    "gitmojis": "^2.1.0"
+    "conventional-commit-types": "^3.0.0"
   }
 }

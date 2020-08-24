@@ -107,13 +107,6 @@ class Commitlint {
     ]);
   }
 
-  lintBody(body: string) {
-    return this.lintRules({ body } as Commit, [
-      'body-min-length',
-      'body-max-length',
-    ]);
-  }
-
   lintFooter(footer: string) {
     return this.lintRules({ footer } as Commit, [
       'footer-min-length',

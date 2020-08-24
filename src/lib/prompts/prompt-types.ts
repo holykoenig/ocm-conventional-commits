@@ -27,6 +27,7 @@ export type Prompt = { name: string; type: PROMPT_TYPES } & Options &
 type Options = {
   placeholder: string;
   format?: (input: string) => string;
+  value: string;
   step: number;
   totalSteps: number;
 };
@@ -73,6 +74,7 @@ type InputBoxOptions = {
 function createInputBox({
   placeholder,
   format = (i) => i,
+  value,
   step,
   totalSteps,
   validate = () => undefined,
@@ -83,6 +85,7 @@ function createInputBox({
     input.totalSteps = totalSteps;
     input.ignoreFocusOut = true;
     input.placeholder = placeholder;
+    input.value = value;
     input.onDidChangeValue(function () {
       try {
         input.validationMessage = validate(input.value);

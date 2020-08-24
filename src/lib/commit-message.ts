@@ -5,9 +5,7 @@
 type CommitMessage = {
   type: string;
   scope: string;
-  gitmoji: string;
   subject: string;
-  body: string;
   footer: string;
 };
 
