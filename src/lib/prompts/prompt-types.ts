@@ -47,7 +47,7 @@ async function createQuickPick({
 }: QuickPickOptions): Promise<string> {
   const pickerItems = items;
   if (noneItem) {
-    pickerItems.unshift(noneItem);
+    pickerItems.push(noneItem);
   }
 
   const selectedItems = await createSimpleQuickPick<Item>({
@@ -135,7 +135,6 @@ async function createConfiguriableQuickPick({
     return {
       label: value,
       description: '',
-      detail: 'From workspace configuration.',
     };
   });
   items.push(newItem);
