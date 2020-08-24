@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import createConventionalCommits from './lib/conventional-commits';
+import { createConventionalCommits } from './lib/conventional-commits';
 import * as output from './lib/output';
 
 export function activate(context: vscode.ExtensionContext) {

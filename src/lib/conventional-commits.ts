@@ -134,7 +134,51 @@ async function getRepository({
   return git.repositories[index];
 }
 
-export default function createConventionalCommits() {
+async function updateConventionalCommits(commitMessage: any) {
+  try {
+    // 2. check git
+    const git = getGitAPI();
+    if (!git) {
+      throw new Error('vscode.git is not enabled.');
+    }
+
+    // 3. get repository
+    const repository = await getRepository({
+      git,
+      workspaceFolders: vscode.workspace.workspaceFolders,
+    });
+
+    // 4. get commitlint rules
+    const commitlintRuleConfigs = await commitlint.loadRuleConfigs(
+      repository.rootUri.fsPath,
+    );
+    output.appendLine(
+      `commitlintRuleConfigs: ${JSON.stringify(
+        commitlintRuleConfigs,
+        null,
+        2,
+      )}`,
+    );
+
+    output.appendLine(
+      `commitMessage: ${JSON.stringify(commitMessage, null, 2)}`,
+    );
+    const message = formatCommitMessage(commitMessage);
+    output.appendLine(`message: ${message}`);
+
+    // 6. switch to scm and put message into message box
+    vscode.commands.executeCommand('workbench.view.scm');
+    repository.inputBox.value = message;
+    output.appendLine(`inputBox.value: ${repository.inputBox.value}`);
+  } catch (e) {
+    output.appendLine(`Finished with an error: ${e.stack}`);
+    vscode.window.showErrorMessage(
+      `${names.Conventional_Commits}: ${e.message}`,
+    );
+  }
+}
+
+function createConventionalCommits() {
   return async function conventionalCommits(arg?: Arg) {
     try {
       output.appendLine('Started');
@@ -213,3 +257,5 @@ export default function createConventionalCommits() {
     }
   };
 }
+
+export { createConventionalCommits, updateConventionalCommits };

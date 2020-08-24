@@ -9,6 +9,8 @@ import promptTypes, { PROMPT_TYPES, Prompt } from './prompts/prompt-types';
 import * as names from '../configs/names';
 import CommitMessage from './commit-message';
 import commitlint from './commitlint';
+import * as output from './output';
+import { updateConventionalCommits } from './conventional-commits';
 
 export default async function prompts(
   {
@@ -173,6 +175,8 @@ export default async function prompts(
       // @ts-ignore
       question,
     );
+
+    updateConventionalCommits(commitMessage);
   }
   return commitMessage;
 }
