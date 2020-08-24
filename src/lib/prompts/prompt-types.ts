@@ -39,6 +39,7 @@ type QuickPickOptions = {
 
 async function createQuickPick({
   placeholder,
+  value,
   items = [],
   format = (i: string) => i,
   step,
@@ -46,12 +47,14 @@ async function createQuickPick({
   noneItem,
 }: QuickPickOptions): Promise<string> {
   const pickerItems = items;
+
   if (noneItem) {
     pickerItems.push(noneItem);
   }
 
   const selectedItems = await createSimpleQuickPick<Item>({
     placeholder,
+    value,
     matchOnDescription: true,
     matchOnDetail: true,
     ignoreFocusOut: true,

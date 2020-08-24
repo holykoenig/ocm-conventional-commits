@@ -6,6 +6,7 @@ import * as vscode from 'vscode';
 
 export default function createQuickPick<T extends vscode.QuickPickItem>({
   placeholder,
+  value,
   items = [],
   format = (i) => i,
   step,
@@ -23,6 +24,7 @@ export default function createQuickPick<T extends vscode.QuickPickItem>({
     picker.ignoreFocusOut = true;
     picker.items = items;
     picker.step = step;
+    picker.value = value || '';
     picker.totalSteps = totalSteps;
     picker.show();
     picker.onDidAccept(function () {

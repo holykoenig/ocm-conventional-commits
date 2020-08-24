@@ -9,7 +9,6 @@ import promptTypes, { PROMPT_TYPES, Prompt } from './prompts/prompt-types';
 import * as names from '../configs/names';
 import CommitMessage from './commit-message';
 import commitlint from './commitlint';
-import * as output from './output';
 
 export default async function prompts(
   {
@@ -19,10 +18,21 @@ export default async function prompts(
   },
   repo: any,
 ): Promise<CommitMessage> {
-  const getBranchName = () => {
-    const branch = repo.state.HEAD.name;
-    const reg = /.*(TUB-\d+).*/;
-    return new RegExp(reg).test(branch) ? branch.match(reg)[1] : 'NO-TICKET';
+  const branch = repo.state.HEAD.name;
+  const getBranchName = (): string => {
+    const regBranch = /.*(TUB-\d+).*/;
+    return new RegExp(regBranch).test(branch)
+      ? branch.match(regBranch)[1]
+      : 'NO-TICKET';
+  };
+
+  const getType = (): string => {
+    if (branch.includes('feature')) {
+      return 'feat';
+    } else if (branch.includes('bugfix')) {
+      return 'fix';
+    }
+    return '';
   };
 
   function lineBreakFormatter(input: string): string {
@@ -110,12 +120,12 @@ export default async function prompts(
       },
     };
   }
-
   const questions: any = [
     {
       type: PROMPT_TYPES.QUICK_PICK,
       name: 'type',
       placeholder: "Select the type of change that you're committing.",
+      value: getType(),
       items: getTypeItems(),
       validate(input: string) {
         return commitlint.lintType(input);
