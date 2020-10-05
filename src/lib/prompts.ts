@@ -2,7 +2,7 @@
  * @since 2020-03-25 09:09
  * @author vivaxy
  */
-const conventionalCommitsTypes = {
+const conventionalCommitsTypes: any = {
   types: {
     feat: {
       description: 'A new feature',
