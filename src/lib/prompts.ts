@@ -2,7 +2,61 @@
  * @since 2020-03-25 09:09
  * @author vivaxy
  */
-const conventionalCommitsTypes = require('conventional-commit-types');
+const conventionalCommitsTypes = {
+  types: {
+    feat: {
+      description: 'A new feature',
+      title: 'Features',
+    },
+    fix: {
+      description: 'A bug fix',
+      title: 'Bug Fixes',
+    },
+    docs: {
+      description: 'Documentation only changes',
+      title: 'Documentation',
+    },
+    style: {
+      description:
+        'Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)',
+      title: 'Styles',
+    },
+    refactor: {
+      description: 'A code change that neither fixes a bug nor adds a feature',
+      title: 'Code Refactoring',
+    },
+    perf: {
+      description: 'A code change that improves performance',
+      title: 'Performance Improvements',
+    },
+    test: {
+      description: 'Adding missing tests or correcting existing tests',
+      title: 'Tests',
+    },
+    build: {
+      description:
+        'Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)',
+      title: 'Builds',
+    },
+    ci: {
+      description:
+        'Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)',
+      title: 'Continuous Integrations',
+    },
+    chore: {
+      description: "Other changes that don't modify src or test files",
+      title: 'Chores',
+    },
+    revert: {
+      description: 'Reverts a previous commit',
+      title: 'Reverts',
+    },
+    e2e: {
+      description: 'End-2-End Test',
+      title: 'e2e',
+    },
+  },
+};
 
 import * as configuration from './configuration';
 import promptTypes, { PROMPT_TYPES, Prompt } from './prompts/prompt-types';
@@ -20,6 +74,8 @@ export default async function prompts(
   },
   repo: any,
 ): Promise<CommitMessage> {
+  debugger;
+  console.log(conventionalCommitsTypes);
   const branch = repo.state.HEAD.name;
   const getBranchName = (): string => {
     const regBranch = /.*(TUB-\d+).*/;
