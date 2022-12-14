@@ -58,7 +58,7 @@ function outputRelatedExtensionConfigutation(key: string) {
 }
 
 type Arg = {
-  _rootUri: vscode.Uri;
+  _rootUri?: vscode.Uri;
 };
 
 function hasChanges(repo: VSCodeGit.Repository) {
@@ -78,7 +78,7 @@ async function getRepository({
   arg?: Arg;
   workspaceFolders?: readonly vscode.WorkspaceFolder[];
 }) {
-  output.appendLine(`arg: ${arg?._rootUri.fsPath}`);
+  output.appendLine(`arg: ${arg?._rootUri?.fsPath}`);
   output.appendLine(
     `git.repositories: ${git.repositories
       .map(function (repo) {
@@ -94,7 +94,7 @@ async function getRepository({
       .join(', ')}`,
   );
 
-  if (arg && arg._rootUri.fsPath) {
+  if (arg && arg._rootUri?.fsPath) {
     const repo = git.repositories.find(function (r) {
       return r.rootUri.fsPath === arg._rootUri.fsPath;
     });
