@@ -63,8 +63,8 @@ import promptTypes, { PROMPT_TYPES, Prompt } from './prompts/prompt-types';
 import * as names from '../configs/names';
 import CommitMessage from './commit-message';
 import commitlint from './commitlint';
-import * as output from './output';
 import { updateConventionalCommits } from './conventional-commits';
+import { getCommitMessages, suggestions } from './commit-message-suggestion';
 
 export default async function prompts(
   {
@@ -74,8 +74,6 @@ export default async function prompts(
   },
   repo: any,
 ): Promise<CommitMessage> {
-  debugger;
-  console.log(conventionalCommitsTypes);
   const branch = repo.state.HEAD.name;
   const getBranchName = (): string => {
     const regBranch = /.*(TUB-\d+).*/;
@@ -191,9 +189,17 @@ export default async function prompts(
     },
     getScopePrompt(),
     {
-      type: PROMPT_TYPES.INPUT_BOX,
+      type: PROMPT_TYPES.CONFIGURIABLE_QUICK_PICK,
       name: 'subject',
       placeholder: 'Write a short, imperative tense description of the change.',
+      moreItems: suggestions,
+
+      newItem: {
+        label: 'Skip commit selections',
+        description: 'create own message',
+        alwaysShow: true,
+      },
+
       validate(input: string) {
         return commitlint.lintSubject(input);
       },

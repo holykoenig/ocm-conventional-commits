@@ -12,6 +12,7 @@ import * as output from './output';
 import commitlint from './commitlint';
 import createSimpleQuickPick from './prompts/quick-pick';
 import CommitMessage from './commit-message';
+import { getCommitMessages, getOpenAIKey } from './commit-message-suggestion';
 
 function getGitAPI(): VSCodeGit.API | void {
   const vscodeGit = vscode.extensions.getExtension<VSCodeGit.GitExtension>(
@@ -96,12 +97,12 @@ async function getRepository({
 
   if (arg && arg._rootUri?.fsPath) {
     const repo = git.repositories.find(function (r) {
-      return r.rootUri.fsPath === arg._rootUri.fsPath;
+      return r.rootUri.fsPath === arg._rootUri?.fsPath;
     });
     if (repo) {
       return repo;
     }
-    throw new Error('Repository not found in path: ' + arg._rootUri.fsPath);
+    throw new Error('Repository not found in path: ' + arg._rootUri?.fsPath);
   }
 
   if (git.repositories.length === 0) {
@@ -141,6 +142,9 @@ async function updateConventionalCommits(commitMessage: any) {
     if (!git) {
       throw new Error('vscode.git is not enabled.');
     }
+
+    // 2.5 get openai key
+    await getCommitMessages();
 
     // 3. get repository
     const repository = await getRepository({
@@ -204,6 +208,9 @@ function createConventionalCommits() {
       if (!git) {
         throw new Error('vscode.git is not enabled.');
       }
+
+      // 2.5 get openai key
+      await getCommitMessages();
 
       // 3. get repository
       const repository = await getRepository({

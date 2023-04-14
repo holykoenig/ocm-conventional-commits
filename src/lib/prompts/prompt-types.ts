@@ -118,6 +118,7 @@ type ConfiguriableQuickPickOptions = {
   configurationKey: keyof configuration.Configuration;
   newItem: Item;
   newItemPlaceholder: string;
+  moreItems?: Item[];
   addNoneOption: boolean;
   validate?: (value: string) => string | undefined;
 } & QuickPickOptions;
@@ -130,17 +131,28 @@ async function createConfiguriableQuickPick({
   configurationKey,
   newItem,
   noneItem,
+  moreItems = [],
   newItemPlaceholder,
   validate = () => undefined,
 }: ConfiguriableQuickPickOptions): Promise<string> {
-  const currentValus: string[] = configuration.get<string[]>(configurationKey);
-  const items: Item[] = currentValus.map(function (value) {
-    return {
-      label: value,
-      description: '',
-    };
-  });
+  const confKey = configuration.get<string[]>(configurationKey);
+  let items: Item[] = [];
+  let currentValues: string[] = [];
+  if (confKey) {
+    currentValues = configuration.get<string[]>(configurationKey);
+    items = currentValues.map(function (value) {
+      return {
+        label: value,
+        description: '',
+      };
+    });
+  }
   items.push(newItem);
+
+  moreItems.forEach(function (item) {
+    items.push(item);
+  });
+
   // @ts-ignore
   let selectedValue = await createQuickPick({
     placeholder,
@@ -158,7 +170,7 @@ async function createConfiguriableQuickPick({
       validate,
     });
     if (selectedValue) {
-      configuration.update(configurationKey, [...currentValus, selectedValue]);
+      configuration.update(configurationKey, [...currentValues, selectedValue]);
     }
   }
   return format(selectedValue);
